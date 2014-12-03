@@ -48,8 +48,8 @@ class DinnerAPI extends API
 				return "Error: Unable to find user ".$name;		
 			}
 
-			$err = file_put_contents('./../db/users/'.$name.'.json', 
-								"lol"/*json_encode($this->body)*/, FILE_USE_INCLUDE_PATH | LOCK_EX);
+			$err = file_put_contents(__DIR__.'/../db/users/'.$name.'.json', 
+						json_encode($this->body), LOCK_EX);
 			if($err == false){
 				return 'Error: Something horrible happend';			
 			}
