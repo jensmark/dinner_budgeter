@@ -35,9 +35,12 @@ abstract class API
      * Allow for CORS, assemble and pre-process the data
      */
     public function __construct($request) {
-        header("Access-Control-Allow-Orgin: *");
+		ini_set("allow_url_fopen", true);
+		ini_set("post_max_size", "10MB");
+        
+		header("Access-Control-Allow-Orgin: *");
         header("Access-Control-Allow-Methods: *");
-        header("Content-Type: application/json");
+        header("Content-Type: application/json");		
 
         $this->args = explode('/', rtrim($request, '/'));
         $this->endpoint = array_shift($this->args);
@@ -58,15 +61,19 @@ abstract class API
 
         switch($this->method) {
         case 'DELETE':
+			$this->request = $this->_cleanInputs($_GET);
+            $this->file = file_get_contents('php://input');
         case 'POST':
-            $this->request = $this->_cleanInputs($_POST);
+            $this->request = $this->_cleanInputs($_GET);
+			$this->file = file_get_contents('php://input');
             break;
         case 'GET':
             $this->request = $this->_cleanInputs($_GET);
+			$this->file = file_get_contents('php://input');
             break;
         case 'PUT':
             $this->request = $this->_cleanInputs($_GET);
-            $this->file = file_get_contents("php://input");
+            $this->file = file_get_contents('php://input');
             break;
         default:
             $this->_response('Invalid Method', 405);
@@ -87,6 +94,7 @@ abstract class API
     }
 
     private function _cleanInputs($data) {
+		echo json_encode($data);
         $clean_input = Array();
         if (is_array($data)) {
             foreach ($data as $k => $v) {
