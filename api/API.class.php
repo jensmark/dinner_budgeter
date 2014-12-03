@@ -25,10 +25,10 @@ abstract class API
      */
     protected $args = Array();
     /**
-     * Property: file
-     * Stores the input of the PUT request
+     * Property: body
+     * Stores the input of the PUT/POST request
      */
-     protected $file = Null;
+     protected $body = Null;
 
     /**
      * Constructor: __construct
@@ -59,26 +59,15 @@ abstract class API
             }
         }
 
-        switch($this->method) {
-        case 'DELETE':
-			$this->request = $this->_cleanInputs($_GET);
-            $this->file = file_get_contents('php://input');
-        case 'POST':
-            $this->request = $this->_cleanInputs($_GET);
-			$this->file = file_get_contents('php://input');
-            break;
-        case 'GET':
-            $this->request = $this->_cleanInputs($_GET);
-			$this->file = file_get_contents('php://input');
-            break;
-        case 'PUT':
-            $this->request = $this->_cleanInputs($_GET);
-            $this->file = file_get_contents('php://input');
-            break;
-        default:
-            $this->_response('Invalid Method', 405);
-            break;
-        }
+		if($this->method != 'GET' &&
+			$this->method != 'POST' &&
+			$this->method != 'PUT' &&
+			$this->method != 'DELETE')	{
+			$this->_response('Invalid Method', 405);
+		}
+
+		$this->request = $this->_cleanInputs($_GET);
+       	$this->body = json_decode(file_get_contents('php://input'));
     }
 
 	public function processAPI() {
@@ -94,7 +83,6 @@ abstract class API
     }
 
     private function _cleanInputs($data) {
-		echo json_encode($data);
         $clean_input = Array();
         if (is_array($data)) {
             foreach ($data as $k => $v) {
