@@ -10,25 +10,19 @@ RewriteRule dinner/api/(.*)$ dinner/api/main.php?request=$1 [R=307,NC,L]
 Get JSON array of all users
 ```
 GET dinner/api/users/
-```
-Output example:
-```
-["Anders", "Jens", "Kristine"]
+// Output
+// ["Anders", "Jens", "Kristine"]
 ```
 Get user object
 ```
 GET dinner/api/user/[name]
-```
-Output example:
-```
-{"name":"Anders","balance":200}
+// Output
+// {"name":"Anders","balance":200}
 ```
 Update user object
 ```
 PUT dinner/api/user/[name]
-```
-Input example:
-```
-{"name":"Anders","balance":-10000}
+// Input
+// {"name":"Anders","balance":-10000}
 ```
 
