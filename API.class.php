@@ -1,3 +1,4 @@
+<?php
 abstract class API
 {
     /**
@@ -108,3 +109,4 @@ abstract class API
     }
 
 }
+?>
